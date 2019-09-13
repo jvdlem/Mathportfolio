@@ -28,6 +28,10 @@ requestAnimationFrame(animate);
 
 
 
+
+
+
+
 let color = "rgba("+ getRandomNumber(0,255) +","+ getRandomNumber(0,255) +","+ getRandomNumber(0,255) +","+ st+")";
 let A = new Point(new Vector2d(getRandomNumber(0,canvas.width),getRandomNumber(0,canvas.height)),size,color,this.radius);
 points.push(A);
