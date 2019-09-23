@@ -10,41 +10,18 @@ let points = [];
 let maxpoints = 10;
 let counter = 0;
 let hit = 0;
-let size = getRandomNumber(10,100);
+let size = 20;
 let vfactor = 2;
 let st = 0;
+let color = "rgba("+ getRandomNumber(0,255) +","+ getRandomNumber(0,255) +","+ getRandomNumber(0,255) +","+ 1+")";
 for(let i=0; i<maxpoints; i++){
   addPoint("rgba("+ getRandomNumber(0,255) +","+ getRandomNumber(0,255) +","+ getRandomNumber(0,255) +","+ 1+")");
-  size = getRandomNumber(10,100);
+  size = 20;
 }
 let mouse = new Vector2d();
 let difference = new Vector2d();
-window.addEventListener('click',(e)=>{
-  mouse.dx = e.clientX;
-  mouse.dy = e.clientY;
-
-  for (var i = 0; i < points.length; i++) {
-    difference.differenceVector(points[i].position,mouse);
-     if(difference.magnitude<points[i].radius){
-       points[i].color = "rgba("+ getRandomNumber(0,255) +","+ getRandomNumber(0,255) +","+ getRandomNumber(0,255) +","+ 1+")";
-       hit++
-       points[i].radius = getRandomNumber(10,100);
-     };
-   }
-   console.log(hit);
-  if(hit>= maxpoints){
-    hit = 0;
-    counter = 0
-    points.splice(0,maxpoints)
-    for (var i = 0; i<maxpoints; i++) {
-      addPoint("rgba("+ getRandomNumber(0,255) +","+ getRandomNumber(0,255) +","+ getRandomNumber(0,255) +","+ 1+")");
-    }
-  }
-})
 function addPoint(color){
   let A = new Point(new Vector2d(getRandomNumber(0,canvas.width),getRandomNumber(0,canvas.height)),size,color,this.radius);
-  A.label = counter;
-  counter++;
   size = getRandomNumber(10,100);
   points.push(A);
 }
@@ -67,4 +44,14 @@ function getRandomNumber(min, max) {
 function getRandom(max){
   let ans = Math.floor(Math.random()*max);
   return ans;
+}
+setInterval(Newpoint, 250);
+
+function Newpoint( )
+{
+  points.shift();
+  let A = new Point(new Vector2d(getRandomNumber(0,canvas.width),getRandomNumber(0,canvas.height)),size,color,this.radius);
+  color = "rgba("+ getRandomNumber(0,255) +","+ getRandomNumber(0,255) +","+ getRandomNumber(0,255) +","+ 1+")";
+points.push(A);
+
 }
