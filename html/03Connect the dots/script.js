@@ -7,7 +7,7 @@ const height = window.innerHeight;
 canvas.width = width;
 canvas.height = height;
 let points = [];
-let maxpoints = 10;
+let maxpoints = 100;
 let counter = 0;
 let hit = 0;
 let size = 20;
@@ -22,13 +22,25 @@ let mouse = new Vector2d();
 let difference = new Vector2d();
 function addPoint(color){
   let A = new Point(new Vector2d(getRandomNumber(0,canvas.width),getRandomNumber(0,canvas.height)),size,color,this.radius);
-  size = getRandomNumber(10,100);
+  size = 20;
   points.push(A);
 }
 
 function animate() {
   context.clearRect(0,0,width,height);
   requestAnimationFrame(animate);
+
+
+  context.beginPath();
+  context.moveTo(points[0].position.dx, points[0].position.dy);
+
+  for(let i = 0; i<points.length; i++){
+    context.lineTo(points[i].position.dx, points[i].position.dy);
+    context.fillStyle = color;
+  }
+  context.closePath();
+  context.stroke();
+  context.fill();
 
 
   for(let i = 0; i<points.length; i++){
@@ -45,7 +57,7 @@ function getRandom(max){
   let ans = Math.floor(Math.random()*max);
   return ans;
 }
-setInterval(Newpoint, 250);
+setInterval(Newpoint, 0.000000000000000000001);
 
 function Newpoint( )
 {

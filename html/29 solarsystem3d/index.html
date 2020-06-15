@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>29 Solarsystem</title>
+    <style>
+    body {margin: 0;}
+    canvas {display: block;}
+    </style>
+</head>
+<body>
+    <script src="js/three.js"></script>
+    <script>
+
+//applicatie
+    let scene = new THREE.Scene();
+    let camera = new THREE.PerspectiveCamera(75,window.innerWidth/window.innerHeight,0.1,10000000);
+    let renderer = new THREE.WebGLRenderer( { antialias: false } );
+    let loader = new THREE.TextureLoader();
+    loader.load('media/stars.jpg' , function(texture)
+            {
+             scene.background = texture;
+            });
+    renderer.setSize(window.innerWidth,window.innerHeight);
+    document.body.appendChild(renderer.domElement);
+
+
+
+
+
+
+
+//variabelen
+
+    let planetfactor = 20;
+    let speedfactor = 1;
+    let sundistance = 1;
+    let sunSize = 10;
+    let mercurydistance = 57;
+    let mercurySize = (sunSize/277)*planetfactor;
+    let venusdistance = 108;
+    let venusSize = (sunSize/115)*planetfactor;
+    let earthdistance = 149;
+    let earthSize = (sunSize/109)*planetfactor;
+    let moondistance = 6;
+    let moonSize = (earthSize/80)*planetfactor;
+    let marsdistance = 228;
+    let marsSize = ((sunSize/109)/2)*planetfactor;
+    let jupiterdistance = 780;
+    let jupiterSize = (sunSize/10)*planetfactor;
+    let saturndistance = 1437;
+    let saturnSize = (sunSize/20)*planetfactor;
+    let youranusndistance = 2871;
+    let youranusSize = (sunSize/29)*planetfactor;
+    let scale = 2;
+    let planetsDistances = [mercurySize,venusSize,earthSize,marsSize,jupiterSize,saturnSize,youranusSize];
+    let planetrings = fillRingArray();
+// basis vorm
+
+    let sunGeometry = new THREE.SphereGeometry(sunSize*scale,50,50);
+    let mercuryGeometry = new THREE.SphereGeometry(mercurySize*scale,16,16);
+    let venusGeometry = new THREE.SphereGeometry(venusSize*scale,16,16);
+    let earthGeometry = new THREE.SphereGeometry(earthSize*scale,16,16);
+    let moonGeometry = new THREE.SphereBufferGeometry(moonSize*scale,16,16);
+    let marsGeometry = new THREE.SphereGeometry(marsSize*scale,16,16);
+    let jupiterGeometry = new THREE.SphereGeometry(jupiterSize*scale,16,16);
+    let saturnGeometry = new THREE.SphereGeometry(saturnSize*scale,16,16);
+    let youranusGeometry = new THREE.SphereGeometry(youranusSize*scale,16,16);
+    let pivotPoint = new THREE.Object3D();
+
+
+//materials
+
+    let sunMaterial = new THREE.MeshBasicMaterial({map: loader.load('media/Zon.jpg')});
+    let mercuryMaterial = new THREE.MeshLambertMaterial({map: loader.load('media/mercurius.jpg')});
+    let venusMaterial = new THREE.MeshLambertMaterial({map: loader.load('media/venus.jpg')});
+    let earthMaterial = new THREE.MeshLambertMaterial({map: loader.load('media/Earth.jpg')});
+    let moonMaterial = new THREE.MeshLambertMaterial({map: loader.load('media/moon.jpg')});
+    let marsMaterial = new THREE.MeshLambertMaterial({map: loader.load('media/mars.jpg')});
+    let jupiterMaterial = new THREE.MeshLambertMaterial({map: loader.load('media/jupiter.jpg')});
+    let saturnMaterial = new THREE.MeshLambertMaterial({map: loader.load('media/saturnus.jpg')});
+    let youranusMaterial = new THREE.MeshLambertMaterial({map: loader.load('media/JeAnus.jpg')});
+
+// rings
+
+
+
+
+
+
+// object
+
+    let sun = new THREE.Mesh(sunGeometry,sunMaterial);
+    let mercury = new THREE.Mesh(mercuryGeometry,mercuryMaterial);
+    let venus = new THREE.Mesh(venusGeometry,venusMaterial);
+    let earth = new THREE.Mesh(earthGeometry,earthMaterial);
+    let moon = new THREE.Mesh(moonGeometry,moonMaterial);
+    let mars = new THREE.Mesh(marsGeometry,marsMaterial);
+    let jupiter = new THREE.Mesh(jupiterGeometry,jupiterMaterial);
+    let saturn = new THREE.Mesh(saturnGeometry,saturnMaterial);
+    let youranus = new THREE.Mesh(youranusGeometry,youranusMaterial);
+
+// add to scene
+
+    scene.add(sun);
+    scene.add(mercury);
+    scene.add(venus);
+    scene.add(earth);
+    scene.add(moon);
+    scene.add(mars);
+    scene.add(jupiter);
+    scene.add(saturn);
+    scene.add(youranus);
+
+
+
+//rotatie van object
+    let sunSpeherical = new THREE.Spherical(0,Math.PI/2,1);
+    let mercurySpeherical = new THREE.Spherical(mercurydistance*scale,Math.PI/2,1);
+    let venusSpeherical = new THREE.Spherical(venusdistance*scale,Math.PI/2,1);
+    let earthSpeherical = new THREE.Spherical(earthdistance*scale,Math.PI/2,1);
+    moon.position.set(0, 0, moondistance*scale);
+    let marsSpeherical = new THREE.Spherical(marsdistance*scale,Math.PI/2,1);
+    let jupiterSpeherical = new THREE.Spherical(jupiterdistance*scale,Math.PI/2,1);
+    let saturnSpeherical = new THREE.Spherical(jupiterdistance*scale,Math.PI/2,1);
+    let youranusSpeherical = new THREE.Spherical(youranusndistance*scale,Math.PI/2,1);
+
+
+//camera
+    camera.position.z = 275;
+    camera.position.y = 50;
+    camera.lookAt(new THREE.Vector3(0,0,0))
+// licht
+    var light = new THREE.PointLight( 0xffffff, 1*scale, 100000000*scale );
+    light.position.set(0, 0, 00 );
+    scene.add( light );
+
+
+//update
+    function animate()
+    {
+      requestAnimationFrame(animate);
+      renderer.render(scene,camera);
+
+      planetrings.map(ring =>{
+        scene.add(ring);
+      });
+
+
+
+      earth.add(pivotPoint);
+      pivotPoint.add(moon);
+      sunSpeherical.theta += 1/(sundistance/speedfactor);
+      mercurySpeherical.theta += 1/(mercurydistance/speedfactor);
+      venusSpeherical.theta += 1/(venusdistance/speedfactor);
+      earthSpeherical.theta += 1/(earthdistance/speedfactor);
+      pivotPoint.rotation.y += 1/(moondistance/speedfactor);
+      marsSpeherical.theta += 1/(marsdistance/speedfactor);
+      jupiterSpeherical.theta += 1/(jupiterdistance/speedfactor);
+      saturnSpeherical.theta += 1/(saturndistance/speedfactor);
+      youranusSpeherical.theta += 1/(youranusndistance/speedfactor);
+
+
+      sun.position.setFromSpherical(sunSpeherical);
+      mercury.position.setFromSpherical(mercurySpeherical);
+      venus.position.setFromSpherical(venusSpeherical);
+      earth.position.setFromSpherical(earthSpeherical);
+      mars.position.setFromSpherical(marsSpeherical);
+      jupiter.position.setFromSpherical(jupiterSpeherical);
+      saturn.position.setFromSpherical(saturnSpeherical);
+      youranus.position.setFromSpherical(youranusSpeherical);
+
+      sun.rotation.y += 0.01;
+      venus.rotation.y += 0.05;
+      earth.rotation.y += 0.05;
+      moon.rotation.y += 0.05;
+      mars.rotation.y += 0.05;
+      jupiter.rotation.y += 0.05;
+      saturn.rotation.y += 0.05;
+      youranus.rotation.y += 0.05;
+
+    }
+function fillRingArray()
+{
+  let myarray =[]
+  let numberOfplanets = planetsDistances;
+  for(let i=0; i<numberOfplanets; i++)
+  {
+     ringGeometry = new THREE.TorusGeometry( numberOfplanets[i], 0.2, 16, 1000 );
+     ringmaterial = new THREE.MeshBasicMaterial( {color: 0xffffff} );
+     ring = new THREE.Mesh(ringGeometry,ringmaterial);
+    ring.rotation.x = 67.555;
+    array.push(ring);
+  }
+  return myarray;
+}
+
+    function distanceVector( v1, v2 )
+{
+    var dx = v1.x - v2.x;
+    var dy = v1.y - v2.y;
+    var dz = v1.z - v2.z;
+
+    return Math.sqrt( dx * dx + dy * dy + dz * dz );
+}
+
+animate();
+    </script>
+</body>
+</html>
