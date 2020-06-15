@@ -31,7 +31,7 @@
 
 
 //variabelen
-
+    let cameraSpeed = 2;
     let planetfactor = 20;
     let speedfactor = 1;
     let sundistance = 1;
@@ -190,7 +190,7 @@ function fillRingArray()
   for(let i=0; i<numberOfplanets; i++)
   {
      let ringGeometry = new THREE.TorusGeometry( planetsDistances[i]*2, 0.4, 16, 1000 );
-     let ringmaterial = new THREE.MeshBasicMaterial( {color: 0xffffff} );
+     let ringmaterial = new THREE.MeshBasicMaterial( {color: 0xffffff,opacity: 0.4,transparent: true});
      let ring = new THREE.Mesh(ringGeometry,ringmaterial);
     ring.rotation.x = 67.555;
     myarray.push(ring);
@@ -202,16 +202,16 @@ addEventListener ('keydown',(evt)=>{
     switch (evt.key)
     {
       case "ArrowRight":
-      camera.position.z += 1;
+      camera.position.z += cameraSpeed;
       break;
       case "ArrowLeft":
-      camera.position.z -= 1;
+      camera.position.z -= cameraSpeed;
       break;
       case "ArrowUp":
-      camera.position.y += 1;
+      camera.position.y += cameraSpeed;
       break;
       case "ArrowDown":
-      camera.position.y -= 1;
+      camera.position.y -= cameraSpeed;
       break;
     }
 })
