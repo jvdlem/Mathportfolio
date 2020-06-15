@@ -53,7 +53,7 @@
     let youranusndistance = 2871;
     let youranusSize = (sunSize/29)*planetfactor;
     let scale = 2;
-    let planetsDistances = [mercurySize,venusSize,earthSize,marsSize,jupiterSize,saturnSize,youranusSize];
+    let planetsDistances = [mercurydistance,venusdistance,earthdistance,marsdistance,jupiterdistance,saturndistance,youranusndistance];
     let planetrings = fillRingArray();
 // basis vorm
 
@@ -80,13 +80,6 @@
     let jupiterMaterial = new THREE.MeshLambertMaterial({map: loader.load('media/jupiter.jpg')});
     let saturnMaterial = new THREE.MeshLambertMaterial({map: loader.load('media/saturnus.jpg')});
     let youranusMaterial = new THREE.MeshLambertMaterial({map: loader.load('media/JeAnus.jpg')});
-
-// rings
-
-
-
-
-
 
 // object
 
@@ -127,24 +120,24 @@
 
 
 //camera
-    camera.position.z = 275;
-    camera.position.y = 50;
+    camera.position.z = 500;
+    camera.position.y = 250;
     camera.lookAt(new THREE.Vector3(0,0,0))
 // licht
     var light = new THREE.PointLight( 0xffffff, 1*scale, 100000000*scale );
     light.position.set(0, 0, 00 );
     scene.add( light );
-
-
+//mapping
+    planetrings.map(ring =>{
+      scene.add(ring);
+    });
 //update
     function animate()
     {
       requestAnimationFrame(animate);
       renderer.render(scene,camera);
 
-      planetrings.map(ring =>{
-        scene.add(ring);
-      });
+
 
 
 
@@ -180,20 +173,7 @@
       youranus.rotation.y += 0.05;
 
     }
-function fillRingArray()
-{
-  let myarray =[]
-  let numberOfplanets = planetsDistances;
-  for(let i=0; i<numberOfplanets; i++)
-  {
-     ringGeometry = new THREE.TorusGeometry( numberOfplanets[i], 0.2, 16, 1000 );
-     ringmaterial = new THREE.MeshBasicMaterial( {color: 0xffffff} );
-     ring = new THREE.Mesh(ringGeometry,ringmaterial);
-    ring.rotation.x = 67.555;
-    array.push(ring);
-  }
-  return myarray;
-}
+
 
     function distanceVector( v1, v2 )
 {
@@ -203,7 +183,38 @@ function fillRingArray()
 
     return Math.sqrt( dx * dx + dy * dy + dz * dz );
 }
-
+function fillRingArray()
+{
+  let myarray =[]
+  let numberOfplanets = planetsDistances.length;
+  for(let i=0; i<numberOfplanets; i++)
+  {
+     let ringGeometry = new THREE.TorusGeometry( planetsDistances[i]*2, 0.4, 16, 1000 );
+     let ringmaterial = new THREE.MeshBasicMaterial( {color: 0xffffff} );
+     let ring = new THREE.Mesh(ringGeometry,ringmaterial);
+    ring.rotation.x = 67.555;
+    myarray.push(ring);
+  }
+  return myarray;
+}
+addEventListener ('keydown',(evt)=>{
+    console.log(evt.key);
+    switch (evt.key)
+    {
+      case "ArrowRight":
+      camera.position.z += 1;
+      break;
+      case "ArrowLeft":
+      camera.position.z -= 1;
+      break;
+      case "ArrowUp":
+      camera.position.y += 1;
+      break;
+      case "ArrowDown":
+      camera.position.y -= 1;
+      break;
+    }
+})
 animate();
     </script>
 </body>
